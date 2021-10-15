@@ -22,14 +22,12 @@ namespace EchoServer
 
         void accept(ba::ip::tcp::socket & socket, size_t buf_size)
         {
-            //acceptor.set_option(ba::socket_base::reuse_address{true});
-            //std::cout << "!in accept: bufsize = " << buf_size << "\n";
-            ba::spawn(context, [this, &socket, buf_size](ba::yield_context yield) // было [&]
+            ba::spawn(context, [this, &socket, buf_size](ba::yield_context yield)
                 {
                   for (;;)
                   {
                     std::cout << "Accept...\n";
-                    //std::cout << "!in accept1.5: bufsize = " << buf_size << "\n";
+
                     boost::system::error_code ec;
                     ba::ip::tcp::socket socket(context);
                     acceptor.async_accept(socket, yield[ec]);

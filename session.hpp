@@ -12,17 +12,10 @@
 #include <boost/system/error_code.hpp>
 #include <iostream>
 
-//#include "parser.hpp"
 
 namespace EchoServer
 {
     namespace ba = boost::asio;
-
-    //struct Request_params;
-
-    //struct Request_params request_parsing(std::vector<unsigned char> query_vec);
-
-    //void print_request_params(struct Request_params Request);
 
     class session : public std::enable_shared_from_this<session>
     {
@@ -33,16 +26,11 @@ namespace EchoServer
 
     private:
         ba::ip::tcp::socket socket_;
-        ba::steady_timer timer_;
-        //boost::asio::io_service::strand strand_;
 
         std::vector<unsigned char> buffer_in;
-        std::vector<unsigned char> buffer_out;
 
         ba::io_context & context;
     };
-
-
 
 }
 
