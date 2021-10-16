@@ -26,10 +26,8 @@ namespace EchoServer
                 {
                   for (;;)
                   {
-                    std::cout << "Accept...\n";
-
                     boost::system::error_code ec;
-                    ba::ip::tcp::socket socket(context);
+
                     acceptor.async_accept(socket, yield[ec]);
 
                     if (!ec)

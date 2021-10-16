@@ -11,24 +11,13 @@
 
 using namespace EchoServer;
 
-// Код основан на примере из документации boost::asio::spawn
-// - https://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/example/cpp11/spawn/echo_server.cpp
-// Расхождение версии из документации и актуальной библиотеки:
-// - https://www.boost.org/doc/libs/1_74_0/doc/html/boost_asio/net_ts.html
-
-namespace ba = boost::asio;
-
 int main(int argc, char* argv[])
 {
-    std::cout << "Start\n";
+    std::cout << "Start...\n";
 
     unsigned short port;
     size_t bufsize;
     size_t thread_num;
-
-    //port = 8080;
-    //bufsize = 1024;
-    //thread_num = 2;
 
     // Проверка аргументов командной строки
     if (argc != 4)
@@ -43,7 +32,7 @@ int main(int argc, char* argv[])
     }
     catch (std::invalid_argument e)
     {
-        std::cerr << "Invalid port";
+        std::cerr << "Invalid port\n";
         return 1;
     }
 
@@ -53,7 +42,7 @@ int main(int argc, char* argv[])
     }
     catch (std::invalid_argument e)
     {
-        std::cerr << "Invalid buffer size";
+        std::cerr << "Invalid buffer size\n";
         return 1;
     }
 
@@ -63,7 +52,7 @@ int main(int argc, char* argv[])
     }
     catch (std::invalid_argument e)
     {
-        std::cerr << "Invalid thread number";
+        std::cerr << "Invalid thread number\n";
         return 1;
     }
 

@@ -33,7 +33,7 @@ namespace EchoServer
               // Чтение запроса
               std::size_t n = socket_.async_read_some(ba::buffer(buffer_in), yield);
               if (ec) return;
-              std::cout << "Get a request, size: " << n << '\n';
+              std::cout << "Get a request, size: " << n << "\n";
 
               // Парсинг и вывод полученного запроса
               try

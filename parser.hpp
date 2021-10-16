@@ -14,6 +14,7 @@
 
 namespace EchoServer
 {
+    // Структура для хранения параметров запроса
     struct Request_params
     {
         size_t length;
@@ -49,13 +50,13 @@ namespace EchoServer
         std::string content;
     };
 
-
+    // Функция для парсинга запроса, возвращает Request_params
     struct Request_params request_parsing(std::vector<unsigned char> query_vec);
 
-
+    // Функция для вывода параметров из структуры Request_params
     void print_request_params(struct Request_params Request);
 
-
+    // Структура для хранения параметров ответа
     struct Response_params
     {
         std::string status;
@@ -64,7 +65,7 @@ namespace EchoServer
         std::string content;
     };
 
-
+    // Функция для формирования ответа по переданным параметрам Response_params
     std::string create_response(struct Response_params Params);
 
 }
