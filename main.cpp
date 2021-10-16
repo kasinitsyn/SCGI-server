@@ -68,21 +68,16 @@ int main(int argc, char* argv[])
     }
 
 
-
     try
     {
-        //std::cout << "port = " << port << " before context initialisation\n";
         ba::io_context context;
 
         ba::thread_pool pool(thread_num);
 
+        echo_server server(context, port);
 
-        //std::cout << "before server initialisation\n";
-        echo_server server(context, port); //std::atoi(argv[1]) - для чтения аргументов командной строки
-        //std::cout << "after server initialisation\n";
         ba::ip::tcp::socket socket(context);
 
-        //std::cout << "Before accept\n";
         server.accept(socket, bufsize);
 
         for (int i = 0; i < thread_num; i++)

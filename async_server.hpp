@@ -34,10 +34,7 @@ namespace EchoServer
 
                     if (!ec)
                     {
-                        //std::cout << "Before make_shared" << "\n";
-                        //std::cout << "!in accept2: bufsize = " << buf_size << "\n";
                         std::make_shared<session>(std::move(socket), context, buf_size)->go();
-                        //std::cout << "After make_shared" << "\n";
                     }
                     else
                     {

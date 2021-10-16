@@ -29,53 +29,40 @@ namespace EchoServer
             [this, self](ba::yield_context yield)
             {
               boost::system::error_code ec;
+
+              // Чтение запроса
+              std::size_t n = socket_.async_read_some(ba::buffer(buffer_in), yield);
+              if (ec) return;
+              std::cout << "Get a request, size: " << n << '\n';
+
+              // Парсинг и вывод полученного запроса
               try
               {
-                for (;;)
-                {
-                  // Чтение запроса
-                  std::size_t n = socket_.async_read_some(ba::buffer(buffer_in), yield);
-                  std::cout << "Get a request, size: " << n << '\n';
-
-                  // Парсинг и вывод полученного запроса
-                  try
-                  {
-                      Request_params Params = request_parsing(buffer_in);
-                      print_request_params(Params);
-                  }
-                  catch (...)
-                  {
-                      std::cerr << "Parsing error: invalid request format\n";
-                  }
-
-                  // Формирование ответа
-                  Response_params RParams;
-                  RParams.status = "200 OK";
-                  RParams.content_type = "text/plain";
-                  RParams.content_length = 23;
-                  RParams.content = "Hello from SCGI server!";
-                  std::string response = create_response(RParams);
-
-                  // Посылка ответа
-                  std::size_t n1 = response.length();
-                  std::size_t res= ba::async_write(socket_, ba::buffer(response, n1), yield); //data1, n1
-                  std::cout << "Sent a responce, size: " << res << '\n';
-
-                  // Закрытие соединения
-                  socket_.close();
-                  std::cout << "Connection closed\n";
-
-                  if (ec)
-                  {
-                      std::cout << "EC occured!!!\n";
-                  }
-                }
+                  Request_params Params = request_parsing(buffer_in);
+                  print_request_params(Params);
               }
-              catch (std::exception &e)
+              catch (...)
               {
-                std::cerr << "Exception in session: " << e.what() << "\n";
-                socket_.close();
+                  std::cerr << "Parsing error: invalid request format\n";
               }
+
+              // Формирование ответа
+              Response_params RParams;
+              RParams.status = "200 OK";
+              RParams.content_type = "text/plain";
+              RParams.content_length = 23;
+              RParams.content = "Hello from SCGI server!";
+              std::string response = create_response(RParams);
+
+              // Посылка ответа
+              std::size_t n1 = response.length();
+              std::size_t res= ba::async_write(socket_, ba::buffer(response, n1), yield);
+              if (ec) return;
+              std::cout << "Sent a responce, size: " << res << '\n';
+
+              // Закрытие соединения
+              socket_.close();
+              std::cout << "Connection closed\n";
             });
     }
 }
