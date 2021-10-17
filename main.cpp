@@ -1,15 +1,14 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/spawn.hpp>
-#include <boost/asio/steady_timer.hpp>
-#include <boost/asio/write.hpp>
+
 #include <iostream>
 #include <memory>
 
 #include "session.hpp"
 #include "async_server.hpp"
 
-using namespace EchoServer;
+using namespace Server;
 
 int main(int argc, char* argv[])
 {
@@ -60,11 +59,8 @@ int main(int argc, char* argv[])
     try
     {
         ba::io_context context;
-
         ba::thread_pool pool(thread_num);
-
-        echo_server server(context, port);
-
+        async_server server(context, port);
         ba::ip::tcp::socket socket(context);
 
         server.accept(socket, bufsize);

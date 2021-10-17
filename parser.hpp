@@ -3,16 +3,9 @@
 
 #include <memory>
 #include <vector>
-
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio.hpp>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio/spawn.hpp>
-#include <boost/system/error_code.hpp>
 #include <iostream>
 
-namespace EchoServer
+namespace Server
 {
     // Структура для хранения параметров запроса
     struct Request_params
@@ -33,7 +26,6 @@ namespace EchoServer
         std::string server_port;
         std::string server_name;
 
-        std::string request_method2;
         std::string http_host;
         std::string http_user_agent;
         std::string http_accept;

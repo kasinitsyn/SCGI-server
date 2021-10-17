@@ -1,17 +1,10 @@
 #include <memory>
 #include <vector>
-
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio.hpp>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio/spawn.hpp>
-#include <boost/system/error_code.hpp>
 #include <iostream>
 
 #include "parser.hpp"
 
-namespace EchoServer
+namespace Server
 {
     struct Request_params request_parsing(std::vector<unsigned char> query_vec)
     {
@@ -22,10 +15,9 @@ namespace EchoServer
         for (char i: query_vec)
             query += i;
 
-        // длина блока с параметрами
-        Request.length = std::stoi(query.substr(0, query.find(":")));
 
-        // ----- GET ----- //
+        Request.length = std::stoi(query.substr(0, query.find(":"))); // длина блока заголовков
+
         Request.content_lentgh = std::stoi(query.substr(query.find("CONTENT_LENGTH") + 15,
                                                   query.find("REQUEST_METHOD") - query.find("CONTENT_LENGTH") - 15));
         Request.request_method = query.substr(query.find("REQUEST_METHOD") + 14,
@@ -53,11 +45,8 @@ namespace EchoServer
         Request.server_port = query.substr(query.find("SERVER_PORT") + 11,
                                                  query.find("SERVER_NAME") - query.find("SERVER_PORT") - 11);
         Request.server_name = query.substr(query.find("SERVER_NAME") + 11,
-                                                 query.find("REQUEST_METHOD", query.find("SERVER_NAME")) - query.find("SERVER_NAME") - 11);
+                                                 query.find("HTTP_HOST", query.find("SERVER_NAME")) - query.find("SERVER_NAME") - 11);
 
-        // ----- POST ------ //
-        Request.request_method2 = query.substr(query.find("REQUEST_METHOD", query.find("SERVER_NAME")) + 14,
-                                                 query.find("HTTP_HOST") - query.find("REQUEST_METHOD", query.find("SERVER_NAME")) - 14);
         Request.http_host = query.substr(query.find("HTTP_HOST") + 9,
                                                  query.find("HTTP_USER_AGENT") - query.find("HTTP_HOST") - 9);
         Request.http_user_agent = query.substr(query.find("HTTP_USER_AGENT") + 15,
@@ -117,7 +106,6 @@ namespace EchoServer
         std::cout << "  remote_port = " << Request.remote_port << "\n";
         std::cout << "  server_port = " << Request.server_port << "\n";
         std::cout << "  server_name = " << Request.server_name << "\n";
-        std::cout << "  request_method2 = " << Request.request_method2 << "\n";
         std::cout << "  http_host = " << Request.http_host << "\n";
         std::cout << "  http_user_agent = " << Request.http_user_agent << "\n";
         std::cout << "  http_accept = " << Request.http_accept << "\n";

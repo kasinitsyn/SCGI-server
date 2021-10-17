@@ -10,12 +10,12 @@
 
 #include "session.hpp"
 
-namespace EchoServer
+namespace Server
 {
-    class echo_server
+    class async_server
     {
     public:
-        echo_server(ba::io_context & _context, unsigned short port)
+        async_server(ba::io_context & _context, unsigned short port)
             : context(_context),
               acceptor(context, ba::ip::tcp::endpoint(ba::ip::tcp::v4(), port))
         {}

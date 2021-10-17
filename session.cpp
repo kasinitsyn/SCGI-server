@@ -4,7 +4,6 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio.hpp>
-#include <boost/asio/io_context.hpp>
 #include <boost/asio/spawn.hpp>
 #include <boost/system/error_code.hpp>
 
@@ -12,10 +11,10 @@
 #include "session.hpp"
 
 
-namespace EchoServer
+namespace Server
 {
-    session::session(ba::ip::tcp::socket socket, ba::io_context & _context, size_t buf_size)
-        : socket_(std::move(socket)),
+    session::session(ba::ip::tcp::socket _socket, ba::io_context & _context, size_t buf_size)
+        : socket(std::move(_socket)),
           context(_context),
           buffer_in(buf_size)
     {}
@@ -31,7 +30,7 @@ namespace EchoServer
               boost::system::error_code ec;
 
               // Чтение запроса
-              std::size_t n = socket_.async_read_some(ba::buffer(buffer_in), yield);
+              std::size_t n = socket.async_read_some(ba::buffer(buffer_in), yield);
               if (ec) return;
               std::cout << "Get a request, size: " << n << "\n";
 
@@ -56,12 +55,12 @@ namespace EchoServer
 
               // Посылка ответа
               std::size_t n1 = response.length();
-              std::size_t res= ba::async_write(socket_, ba::buffer(response, n1), yield);
+              std::size_t res= ba::async_write(socket, ba::buffer(response, n1), yield);
               if (ec) return;
               std::cout << "Sent a responce, size: " << res << '\n';
 
               // Закрытие соединения
-              socket_.close();
+              socket.close();
               std::cout << "Connection closed\n";
             });
     }
